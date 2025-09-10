@@ -19,6 +19,7 @@ Lalu saya melakukan deployment ke PWS dengan create new project lalu isi raw edi
 Terakhir, membuat file readme.md. lalu isi dengan jawaban beberapa pertanyaan dan git add, commit, dan push,
 
 ### 2. Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara urls.py, views.py, models.py, dan berkas html.
+<img width="1394" height="784" alt="Image" src="https://github.com/user-attachments/assets/7f2bff1e-c8ed-4768-a928-e43713bf34db" />
 
 ### 3.Jelaskan peran settings.py dalam proyek Django!
 Peran settings.py adalah sebagai pengatur konfigurasi utama proyek. Di settings.py, kita dapat mengatur debug mati atau aktif, menghubungkan database, manajemen aplikasi dan menentukan host yang diizinkan.
