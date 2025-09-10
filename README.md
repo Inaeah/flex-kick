@@ -1,6 +1,6 @@
 # FLEX KICK
-## Tautan PWS
-inayah-saffanah-flexkick.pbp.cs.ui.ac.id
+## Deployment
+[Flex Kick](https://inayah-saffanah-flexkick.pbp.cs.ui.ac.id/)
 
 ## Pertanyaan
 ### 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step
