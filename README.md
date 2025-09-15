@@ -2,7 +2,7 @@
 ## Deployment
 [Flex Kick](https://inayah-saffanah-flexkick.pbp.cs.ui.ac.id/)
 
-## Pertanyaan
+## Pertanyaan Tugas1
 ### 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step
 Pertama membuat direktori baru dan virtual environment,lalu instal beberapa dependencies dan buat proyek Djangonya dengan perintah django-admin startproject flex_kick . selanjutnya konfigurasi environment variables dengan PRODUCTIONS=False untuk file .env dan True untuk file .env.prod dan masukkan kredensial database ke .env.prod, lalu daftarkan host local. 
 
@@ -32,3 +32,35 @@ Karena Django mempunyai struktur yang jelas mengikuti pola desain Model View Tem
 
 ### 6. Apakah ada feedback untuk asisten dosen tutorial 1 yang telah kamu kerjakan sebelumnya?
 Menurut saya, tutorial 1 sudah sangat jelas dan detail sehingga saya mudah mengikutinya.
+
+
+## Pertanyaan Tugas2
+### 1. Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
+Karena data delivery berfungsi sebagai pengantar informasi antar sistem. Dengan data delivery, data bisa ke tempat lain dengan cepat dan aman, sehingga platform bisa terhubung dengan baik.
+
+### 2. Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
+Menurut saya, lebih baik JSON. Alasan JSON lebih populer dan lebih baik menurut saya adalah karena JSON lebih mudah dibaca dan dipahami.
+
+### 3. Jelaskan fungsi dari method is_valid() pada form Django dan mengapa kita membutuhkan method tersebut?
+Method is_valid() berfungsi untuk mengecek apakah input dari user sudah sesuai dengan aturan. Kita membutuhkan method ini agar data yang masuk sudah lengkap dan sesuai sebelum disimpan, jika tidak ada maka bisa menimbulkan error dalam pengolahan data.
+
+### 4. Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
+csrf_token berguna untuk membedakan request asli dengan yang palsu. Jika tidak menambahkan csrf_token, user dapat diserang dengan membuat user yang sedang login tanpa sadar menghapus data, mengganti pasword, atau transfer uang.
+
+### 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+
+### 6. Apakah ada feedback untuk asdos di tutorial 2 yang sudah kalian kerjakan?
+Tidak ada, menurut saya sudah cukup baik.
+
+### Postman
+#### XML
+![Image](https://github.com/user-attachments/assets/a90b0fe2-0039-46a4-a2ff-b6666594e825)
+
+#### JSON
+<img width="1707" height="814" alt="Image" src="https://github.com/user-attachments/assets/374d99d2-4093-49dc-971d-e8d7f52b9dfa" />
+
+#### XML by id
+<img width="1713" height="771" alt="Image" src="https://github.com/user-attachments/assets/4266e703-7ca9-4dbe-a28c-e141523064f0" />
+
+#### JSON by id
+<img width="1699" height="774" alt="Image" src="https://github.com/user-attachments/assets/bb14180e-1bd5-4318-b4e4-a34c5de649c2" />
