@@ -48,6 +48,15 @@ Method is_valid() berfungsi untuk mengecek apakah input dari user sudah sesuai d
 csrf_token berguna untuk membedakan request asli dengan yang palsu. Jika tidak menambahkan csrf_token, user dapat diserang dengan membuat user yang sedang login tanpa sadar menghapus data, mengganti pasword, atau transfer uang.
 
 ### 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+I. Untuk menambahkan 4 fungsi baru, fungsi yang dibutuhkan adalah fungsi untuk melihat XML, XML by id, JSON, dan JSON by id. Pertama fungsinya menerima parameter request dan di dalam fungsinya ada variabel yang menyimpan hasil query dari seluruh data Product. Untuk by id, variabelnya menyimpan hasil query dari id tertentu yang ada di Product. Lalu saya menambahkan return function HttpResponse yang parameternya data hasil query yang sudah diserialisasi dan content type XML atau JSON.
+
+II. Setelahnya, kita perlu routing 4 fungsi sebelumnya di urls.py yang ada di direktori main. Import fungsi yang sudah dibuat sebelumnya, lalu tambahkan path URL ke urlpatterns agar fungsi sebelumnya dapat diakses. 
+
+III. Untuk membuat halaman utama, update kode di main.html yang ada di direktori main/templates. Untuk membuat button "Add" dan "Detail" , kita memerlukan url yang akan redirect jika dipencet. Untuk menampilkan produk, looping product_list lalu tampilkan informasi yang dibuuthkan.
+
+IV. Selanjutnya kita perlu membuat halaman form untuk menambahkann produk. Saya membuat file HTML add_product di main/templates. Pada page ini, kita meminta input kepada user dengan fields yang sudah dibuat pada tugas sebelumnya. 
+
+V. Langkah terakhir, kita perlu membuat page detail produk. Buat button agar user bisa kembali ke landing page lalu masukkan atribut product dibawahnya dengan rapih.
 
 ### 6. Apakah ada feedback untuk asdos di tutorial 2 yang sudah kalian kerjakan?
 Tidak ada, menurut saya sudah cukup baik.
