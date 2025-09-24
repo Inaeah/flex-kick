@@ -73,3 +73,27 @@ Tidak ada, menurut saya sudah cukup baik.
 
 #### JSON by id
 <img width="1699" height="774" alt="Image" src="https://github.com/user-attachments/assets/bb14180e-1bd5-4318-b4e4-a34c5de649c2" />
+
+
+## Pertanyaan Tugas 3
+### 1. Apa itu Django AuthenticationForm? Jelaskan juga kelebihan dan kekurangannya.
+Django AuthenticationForm adalah form dari Django untuk proses login. Form ini otomatis menyediakan field username dan password. Kelebihannya adalah mudah digunakan dan sudah aman. Kekurangannya adalah kurang fleksibel jika ingin login bukan dengan username dan password.
+
+### 2. Apa perbedaan antara autentikasi dan otorisasi? Bagaiamana Django mengimplementasikan kedua konsep tersebut?
+Autentikasi adalah proses verifikasi identitas user sedangkan otorisasi adalah hak akses pengguna. Autentikasi diimplementasikan menggunakan AuthenticationForm (memasukkan username dan password) sedangkan otorisasi diimplementasikan seperti decorators login_required.
+
+### 3. Apa saja kelebihan dan kekurangan session dan cookies dalam konteks menyimpan state di aplikasi web?
+Session : Data disimpan di server sehingga lebih aman dan user tidak bisa langsung mengubah/melihat, tapi butuh resource server lebih banyak.
+Cookies : Data disimpan di browser sehingga lebih ringan, tapi rentan terhadap serangan keamananan
+
+### 4. Apakah penggunaan cookies aman secara default dalam pengembangan web, atau apakah ada risiko potensial yang harus diwaspadai? Bagaimana Django menangani hal tersebut?
+Ada risiko yang harus diwaspadai karena Cookies bisa terkena XSS. Django menangani hal ini dengan menggunakan CSRF token untuk memastikan bahwa request benar-benar berasal dari user yang memakai aplikasi kita. 
+
+### 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+Pertama membuat form registrasi dengan impor formulir bawaan lalu menambahkan fungsi register di views.py untuk menghasilkan form register dan menghasilkan akun pengguna lalu buat templatenya dan tambahkan path url. Selanjutnya membuat fungsi login dengan fungsi bawaan Django lalu buat template dan path urlnya. Terakhir membuat fungsi logout dengan import logout, buat fungsi dengan menghapus sesi pengguna yg sedang masuk dan arahkan ke halaman login lalu buat template dan path url. 
+
+Membuat dua akun dilakukan dengan register dua akun dan login. Lalu menambahkan tiga produk pada masing-masing akun dengan add product dan memasukkan data.
+
+Untuk menghubungkan model Product dengan User, kita harus mengubah models.py dengan import User. Setelahnya, tambahkan variabel user untuk menghubungkan satu product dengan user. Lalu lakukan migrasi. Setelahnya ubah views dengan menyimpan user setiap menambahkan produk.Terakhir, tampilkan user yang membuat produk dengan menambahkannya di product_detail.html.
+
+Gunakan request.user.username untuk mengambil username user yang sedang login. Untuk membuat last_login, pertama import HttpResponseRedirect, reverse, dan datetime di views.py lalu simpan cookie last_login yang berisi timestamp terakhir login. Ubah fungsi logout untuk menghapus cookie saat logout. Terakhir menampilkan last_login dengan request.COOKIES.get('last_login', 'Never').
