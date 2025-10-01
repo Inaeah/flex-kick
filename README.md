@@ -2,7 +2,7 @@
 ## Deployment
 [Flex Kick](https://inayah-saffanah-flexkick.pbp.cs.ui.ac.id/)
 
-## Pertanyaan Tugas1
+## Pertanyaan Tugas 2
 ### 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step
 Pertama membuat direktori baru dan virtual environment,lalu instal beberapa dependencies dan buat proyek Djangonya dengan perintah django-admin startproject flex_kick . selanjutnya konfigurasi environment variables dengan PRODUCTIONS=False untuk file .env dan True untuk file .env.prod dan masukkan kredensial database ke .env.prod, lalu daftarkan host local. 
 
@@ -34,7 +34,7 @@ Karena Django mempunyai struktur yang jelas mengikuti pola desain Model View Tem
 Menurut saya, tutorial 1 sudah sangat jelas dan detail sehingga saya mudah mengikutinya.
 
 
-## Pertanyaan Tugas2
+## Pertanyaan Tugas 3
 ### 1. Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
 Karena data delivery berfungsi sebagai pengantar informasi antar sistem. Dengan data delivery, data bisa ke tempat lain dengan cepat dan aman, sehingga platform bisa terhubung dengan baik.
 
@@ -75,7 +75,7 @@ Tidak ada, menurut saya sudah cukup baik.
 <img width="1699" height="774" alt="Image" src="https://github.com/user-attachments/assets/bb14180e-1bd5-4318-b4e4-a34c5de649c2" />
 
 
-## Pertanyaan Tugas 3
+## Pertanyaan Tugas 4
 ### 1. Apa itu Django AuthenticationForm? Jelaskan juga kelebihan dan kekurangannya.
 Django AuthenticationForm adalah form dari Django untuk proses login. Form ini otomatis menyediakan field username dan password. Kelebihannya adalah mudah digunakan dan sudah aman. Kekurangannya adalah kurang fleksibel jika ingin login bukan dengan username dan password.
 
@@ -97,3 +97,42 @@ Membuat dua akun dilakukan dengan register dua akun dan login. Lalu menambahkan 
 Untuk menghubungkan model Product dengan User, kita harus mengubah models.py dengan import User. Setelahnya, tambahkan variabel user untuk menghubungkan satu product dengan user. Lalu lakukan migrasi. Setelahnya ubah views dengan menyimpan user setiap menambahkan produk.Terakhir, tampilkan user yang membuat produk dengan menambahkannya di product_detail.html.
 
 Gunakan request.user.username untuk mengambil username user yang sedang login. Untuk membuat last_login, pertama import HttpResponseRedirect, reverse, dan datetime di views.py lalu simpan cookie last_login yang berisi timestamp terakhir login. Ubah fungsi logout untuk menghapus cookie saat logout. Terakhir menampilkan last_login dengan request.COOKIES.get('last_login', 'Never').
+
+## Pertanyaan Tugas 5
+### 1. Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+Jika ada beberapa CSS selector, prioritas paling tinggi adalah inline style. Inline style ini langsung ditulisa di elemen dengan atribut style=...Prioritas kedua adalah ID selector. ID selector menggunakan id pada tag sebagai selectornya. Prioritas selanjutnya adalah Class selector. Class selector ini mengelompokkan elemen dengan karakteristik yg sama. Selanjutnya ada Element Selector. Element Selector mengubah elemen HTML berdasarkan nama tagnya.
+
+
+### 2. Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design, serta jelaskan mengapa!
+Contoh yang sudah menerapkan responsive adalah Scele karena saat dibuka di tab atau HP, layoutnya menyesuaikan. Contoh yang tidak menerapkan responsive design adalah SIAK-NG karena layoutnya tidak menyesuaikan saat dibuka di hp.
+Responsive design sangat penting karena tidak semua user mengakses web dengan komputer, banyak yang memakai hp karena lebih mudah dibawa. Web yang tidak menerapkan responsive design membuat user kesulitan dan tidak nyaman. Hal ini menurunkan pengalaman pengguna. 
+
+### 3. Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+Margin adalah jarak kosong di sekitar border.
+Border adalah garis ujung yang mengelilingi konten dan padding jika ada.
+Padding adalah jarak kosong antara konten dengan border.
+
+Contoh implementasi ketiganya:
+.kotak {
+  margin: 20px;         
+  padding: 20px;            
+  border: 2px black;   
+}
+
+### 4. Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+Flex box digunakan untuk mengatur elemen 1 dimensi (baris atau kolom) sehingga elemen bisa menyesuaikan posisi dan ukuran. Flex box cocok digunakan untuk navbar.
+Grid Layout digunakan untuk mengatur elemen 2 dimensi (baris dan kolom). Grid Layout cocok digunakan untuk galeri foto.
+
+### 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+
+I. Pertama menambahkan fungsi edit_product dan delete_product di views.py. Lalu tambahkan routing url keduanya. Selanjutnya buat template html edit_product.html untuk mengedit. delete_product tidak perlu dibuat template karena user akan tetap di main.
+
+II. Selain itu, untuk memastikan tampilan menarik dan konsisten, gunakan Tailwind pada template dasar (base) sehingga semua halaman mewarisi gaya yang sama. Di base juga tambahkan meta viewport agar browser pada perangkat mobile dapat menyesuaikan lebar viewport saat merender halaman, serta mendefinisikan CSS global untuk menyamakan tampilan form (input, textarea, select, checkbox), sehingga tampilannya lebih rapi, konsisten, dan responsif.
+
+III. Lalu ubah template html login, register, add_product, edit_product, detail_product dengan mengganti bg, tombol, dan teks semenarik mungkin. Styling dibuat menggunakan utilitas Tailwind agar mudah diubah kemudian.
+
+IV. Jika belum ada product, siapkan gambar di folder static/image untuk ditampilkan saat belum ada product. Tambahkan button add product dibawahnya. Jika sudah ada product, buat card untuk menampilkan tiap product dengan atribut yang sudah ada. 
+
+V. Cek dulu apakah user yang sekarang login adalah pemilik produknya. Jika iya maka tampilkan button untuk mengedit dan menghapus. Tombol dibuat dengan menyisipkan link edit atau hapus.
+
+VI. Buat 2 navbar, untuk mobile dan desktop agar web menjadi responsive. Navbar berisi nama aplikasi, home, add product, informasi pengguna yg login, dan tombol logout. Untuk navbar versi desktop, fitur-fiturnya ada secara horizontal. Sedangkkan navbar mobile secara vertikal.
