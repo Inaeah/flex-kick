@@ -102,4 +102,32 @@
     </div>
   </div>
 </div>
+
+<script>
+document.querySelector('form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const form = e.target;
+  const formData = new FormData(form);
+
+  const response = await fetch("{% url 'main:login_ajax' %}", {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+    }
+  });
+
+  const data = await response.json();
+
+  if (data.success) {
+    showToast('Welcome', data.message, 'success');
+    setTimeout(() => window.location.href = "{% url 'main:show_main' %}", 1200);
+  } else {
+    const msg = data.errors ? JSON.stringify(data.errors) : data.message;
+    showToast('Error', msg, 'error');
+  }
+});
+</script>
+
 {% endblock content %}

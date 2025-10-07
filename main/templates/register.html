@@ -115,4 +115,33 @@
     </div>
   </div>
 </div>
+
+<script>
+document.querySelector('form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const form = e.target;
+  const formData = new FormData(form);
+
+  const response = await fetch("{% url 'main:register_ajax' %}", {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+    }
+  });
+
+  const data = await response.json();
+
+  if (data.success) {
+    showToast('Success', data.message, 'success');
+    setTimeout(() => window.location.href = "{% url 'main:login' %}", 1500);
+  } else {
+    const msg = data.errors ? JSON.stringify(data.errors) : data.message;
+    showToast('Error', msg, 'error');
+  }
+});
+</script>
+
+
 {% endblock content %}

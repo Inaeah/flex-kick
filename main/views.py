@@ -203,3 +203,36 @@ def edit_product_entry_ajax(request, id):
     p.save()
 
     return HttpResponse(b"CREATED", status=201)
+
+@csrf_exempt
+def register_ajax(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            return JsonResponse({'success': True, 'message': 'Account created successfully!'})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+    return JsonResponse({'success': False, 'message': 'Invalid method'}, status=405)
+
+
+@csrf_exempt
+def login_ajax(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            response = JsonResponse({'success': True, 'message': 'Login successful!'})
+            response.set_cookie('last_login', str(datetime.datetime.now()))
+            return response
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+    return JsonResponse({'success': False, 'message': 'Invalid method'}, status=405)
+
+@csrf_exempt
+def logout_ajax(request):
+    logout(request)
+    response = JsonResponse({'success': True, 'message': 'You have successfully logged out'})
+    response.delete_cookie('last_login')
+    return response

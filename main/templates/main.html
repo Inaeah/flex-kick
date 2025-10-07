@@ -28,6 +28,12 @@
       Add Product by AJAX
     </button>
 
+    <button 
+      onclick="refreshProductData()" 
+      class="inline-flex items-center bg-gray-900 text-gray-200 border border-gray-600 px-4 py-2 rounded-md font-medium transition-colors hover:bg-blue-600 hover:text-white">
+      Refresh Products
+    </button>
+
     <!-- Filter Section -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-center mb-8 bg-gray-900 rounded-lg border border-gray-600 p-4">
       <div class="flex space-x-3 mb-4 sm:mb-0">
@@ -85,6 +91,10 @@ const showMyProductButton = document.getElementById('filter-my');
 // State Variables
 let activeFilter = 'all';
 let allProductData = [];
+function refreshProductData() {
+  showToast("Refreshing...", "Updating product list...", "normal");
+  fetchProductFromServer();
+}
 
 // === CSRF helper (Django) ===
 function getCookie(name) {
