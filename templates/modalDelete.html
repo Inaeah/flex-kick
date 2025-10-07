@@ -1,0 +1,91 @@
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+  <div class="bg-gray-900 text-white rounded-lg p-6 w-80 shadow-lg border border-gray-700">
+    <h2 class="text-lg font-semibold mb-4">Konfirmasi Hapus</h2>
+    <p class="text-gray-300 mb-6">Apakah kamu yakin ingin menghapus produk ini?</p>
+    <div class="flex justify-end space-x-3">
+      <button id="cancelDeleteBtn" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-md">Batal</button>
+      <button id="confirmDeleteBtn" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-md">Hapus</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let deleteTargetUrl = null;
+  let deleteTargetId = null;
+
+  // Buka modal
+  function openDeleteModal(deleteUrl, productId) {
+    deleteTargetUrl = deleteUrl;
+    deleteTargetId = productId;
+    const modal = document.getElementById('deleteModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+
+  // Tutup modal tanpa hapus
+  document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
+    const modal = document.getElementById('deleteModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    deleteTargetUrl = null;
+    deleteTargetId = null;
+  });
+
+  // Helper ambil CSRF
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  // Saat klik Hapus
+  document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+    if (!deleteTargetUrl) return;
+
+    const csrftoken = getCookie('csrftoken');
+
+    try {
+      const response = await fetch(deleteTargetUrl, {
+        method: 'DELETE',
+        headers: { 'X-CSRFToken': csrftoken },
+      });
+
+      if (response.ok) {
+        // Tutup modal
+        const modal = document.getElementById('deleteModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+
+        // Tampilkan toast sukses
+        showToast('Berhasil!', 'Produk telah dihapus.', 'success');
+
+        // 🔥 Refresh data produk dari server TANPA reload halaman
+        if (typeof fetchProductFromServer === 'function') {
+          fetchProductFromServer();
+        } else {
+          // fallback kalau dipanggil di luar konteks main.html
+          document.dispatchEvent(new CustomEvent('productAdded'));
+        }
+
+      } else {
+        showToast('Gagal!', 'Produk tidak dapat dihapus.', 'error');
+      }
+    } catch (error) {
+      console.error(error);
+      showToast('Error!', 'Terjadi kesalahan koneksi.', 'error');
+    } finally {
+      deleteTargetUrl = null;
+      deleteTargetId = null;
+    }
+  });
+</script>

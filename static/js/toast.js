@@ -9,7 +9,7 @@ function showToast(title, message, type = 'normal', duration = 3000) {
     toastComponent.classList.remove(
         'bg-red-50', 'border-red-500', 'text-red-600',
         'bg-green-50', 'border-green-500', 'text-green-600',
-        'bg-white', 'border-gray-300', 'text-gray-800'
+        'bg-black', 'border-gray-300', 'text-white'
     );
 
     // Set type styles and icon
@@ -20,8 +20,8 @@ function showToast(title, message, type = 'normal', duration = 3000) {
         toastComponent.classList.add('bg-red-50', 'border-red-500', 'text-red-600');
         toastComponent.style.border = '1px solid #ef4444';
     } else {
-        toastComponent.classList.add('bg-white', 'border-gray-300', 'text-gray-800');
-        toastComponent.style.border = '1px solid #d1d5db';
+        toastComponent.classList.add('bg-gray-700', 'border-gray-300', 'text-white','bg-opacity-70');
+        toastComponent.style.border = '1px solid #6f6f6fff';
     }
 
     toastTitle.textContent = title;

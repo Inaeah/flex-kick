@@ -9,10 +9,11 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import datetime
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
@@ -181,5 +182,24 @@ def add_product_entry_ajax(request):
         user=user
     )
     new_product.save()
+
+    return HttpResponse(b"CREATED", status=201)
+
+@require_POST
+def edit_product_entry_ajax(request, id):
+    p = get_object_or_404(Product, id=id)
+
+    # hanya pemilik yang boleh edit (opsional tapi direkomendasikan)
+    if request.user != p.user:
+        return HttpResponse('Forbidden', status=403)
+
+    p.name = request.POST.get("name", p.name)
+    p.brand = request.POST.get("brand", p.brand)
+    p.price = request.POST.get("price", p.price)
+    p.description = request.POST.get("description", p.description)
+    p.category = request.POST.get("category", p.category)
+    p.thumbnail = request.POST.get("thumbnail", p.thumbnail)
+    p.is_featured = request.POST.get("is_featured") == 'on'
+    p.save()
 
     return HttpResponse(b"CREATED", status=201)

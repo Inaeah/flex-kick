@@ -63,7 +63,6 @@
             <label for="is_featured" class="ml-2 text-sm font-medium text-white">Featured Product</label>
           </div>
         </div>
-
       </form>
     </div>
 
@@ -75,52 +74,223 @@
   </div>
 </div>
 
-...
 <script>
-  function showModal() {
-      const modal = document.getElementById('crudModal');
-      const modalContent = document.getElementById('crudModalContent');
+  // ---------- state ----------
+  let isEditMode = false;
+  let currentEditProductId = null;
 
-      modal.classList.remove('hidden'); 
-      setTimeout(() => {
-        modalContent.classList.remove('opacity-0', 'scale-95');
-        modalContent.classList.add('opacity-100', 'scale-100');
-      }, 50); 
+  // ---------- CSRF helper ----------
+  function getCookieLocal(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const c = cookies[i].trim();
+        if (c.startsWith(name + '=')) {
+          cookieValue = decodeURIComponent(c.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+  const csrftoken_local = getCookieLocal('csrftoken');
+
+  // ---------- modal show / hide ----------
+  function showModal() {
+    const modal = document.getElementById('crudModal');
+    const modalContent = document.getElementById('crudModalContent');
+    if (!modal || !modalContent) return;
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      modalContent.classList.remove('opacity-0', 'scale-95');
+      modalContent.classList.add('opacity-100', 'scale-100');
+    }, 50);
   }
 
   function hideModal() {
-      const modal = document.getElementById('crudModal');
-      const modalContent = document.getElementById('crudModalContent');
+    const modal = document.getElementById('crudModal');
+    const modalContent = document.getElementById('crudModalContent');
+    if (!modal || !modalContent) return;
 
-      modalContent.classList.remove('opacity-100', 'scale-100');
-      modalContent.classList.add('opacity-0', 'scale-95');
+    modalContent.classList.remove('opacity-100', 'scale-100');
+    modalContent.classList.add('opacity-0', 'scale-95');
 
-      setTimeout(() => {
-        modal.classList.add('hidden');
-      }, 150); 
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      // reset state & form
+      isEditMode = false;
+      currentEditProductId = null;
+      const form = document.getElementById('productForm');
+      if (form) form.reset();
+      const titleEl = document.querySelector('#crudModalContent h3');
+      const submitBtn = document.getElementById('submitProduct');
+      if (titleEl) titleEl.textContent = 'Add New Product';
+      if (submitBtn) submitBtn.textContent = 'Add Product';
+    }, 150);
   }
 
+  // ---------- populate form ----------
+  function populateFormWithProduct(product) {
+    if (!product) return;
+    const setIf = (id, value) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.value = (value === undefined || value === null) ? '' : String(value);
+    };
+
+    setIf('name', product.name);
+    setIf('price', product.price);
+    setIf('brand', product.brand);
+    setIf('description', product.description);
+    setIf('thumbnail', product.thumbnail);
+
+    // select
+    const sel = document.getElementById('category');
+    if (sel) {
+      const found = Array.from(sel.options).some(o => o.value === product.category);
+      sel.value = found ? product.category : '';
+    }
+
+    // checkbox
+    const cb = document.getElementById('is_featured');
+    if (cb) {
+      cb.checked = (product.is_featured === true || product.is_featured === 'true' || product.is_featured === 1 || product.is_featured === '1');
+    }
+
+    const titleEl = document.querySelector('#crudModalContent h3');
+    const submitBtn = document.getElementById('submitProduct');
+    if (titleEl) titleEl.textContent = 'Edit Product';
+    if (submitBtn) submitBtn.textContent = 'Update Product';
+  }
+
+  // ---------- open add / edit ----------
+  function openAddModal() {
+    isEditMode = false;
+    currentEditProductId = null;
+    const form = document.getElementById('productForm');
+    if (form) form.reset();
+    const titleEl = document.querySelector('#crudModalContent h3');
+    const submitBtn = document.getElementById('submitProduct');
+    if (titleEl) titleEl.textContent = 'Add New Product';
+    if (submitBtn) submitBtn.textContent = 'Add Product';
+    showModal();
+  }
+
+  async function openEditModal(productId) {
+    if (!productId) return;
+    isEditMode = true;
+    currentEditProductId = productId;
+
+    // first try client cache
+    let product = null;
+    try {
+      if (window.allProductData && Array.isArray(window.allProductData)) {
+        product = window.allProductData.find(p => String(p.id) === String(productId));
+      }
+    } catch (err) {
+      console.warn('openEditModal: error accessing client cache', err);
+    }
+
+    // fallback fetch from server if not found
+    if (!product) {
+      try {
+        const urlTemplate = "{% url 'main:show_json_by_id' '00000000-0000-0000-0000-000000000000' %}";
+        const url = urlTemplate.replace('00000000-0000-0000-0000-000000000000', productId);
+        const resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
+        if (resp.ok) product = await resp.json();
+        else console.warn('openEditModal: fetch failed', resp.status);
+      } catch (err) {
+        console.error('openEditModal fetch error', err);
+      }
+    }
+
+    if (product) populateFormWithProduct(product);
+    else {
+      // leave form empty but set UI to edit mode
+      const titleEl = document.querySelector('#crudModalContent h3');
+      const submitBtn = document.getElementById('submitProduct');
+      if (titleEl) titleEl.textContent = 'Edit Product';
+      if (submitBtn) submitBtn.textContent = 'Update Product';
+    }
+
+    showModal();
+  }
+
+  // expose to global so main.html can call
+  window.openAddModal = openAddModal;
+  window.openEditModal = openEditModal;
+
+  // ---------- AJAX add / edit ----------
   async function addProductEntry() {
-    await fetch("{% url 'main:add_product_entry_ajax' %}", {
-      method: "POST",
-      body: new FormData(document.querySelector('#productForm')),
-    })
-
-    document.getElementById("productForm").reset();
-    hideModal();
-      
-    // Show toast notification
-    showToast('Product added successfully!', '', 'success');
-
-    // Dispatch custom event to notify main.html about new data
-    document.dispatchEvent(new CustomEvent('productAdded'));
-
-    return false;
+    const form = document.getElementById('productForm');
+    if (!form) return false;
+    try {
+      const resp = await fetch("{% url 'main:add_product_entry_ajax' %}", {
+        method: "POST",
+        headers: { 'X-CSRFToken': csrftoken_local },
+        body: new FormData(form)
+      });
+      if (!resp.ok) {
+        console.error('add failed', resp.status);
+        showToast('Failed to add product', '', 'error');
+        return false;
+      }
+      form.reset();
+      hideModal();
+      showToast('Product added successfully!', '', 'success');
+      if (typeof window.fetchProductFromServer === 'function') window.fetchProductFromServer();
+      else document.dispatchEvent(new CustomEvent('productAdded'));
+      return true;
+    } catch (err) {
+      console.error('addProductEntry error', err);
+      showToast('Error adding product', '', 'error');
+      return false;
+    }
   }
 
-  document.getElementById("productForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-    addProductEntry();
-})
+  async function editProductEntry(productId) {
+    if (!productId) {
+      showToast('Product id missing', '', 'error');
+      return false;
+    }
+    const form = document.getElementById('productForm');
+    if (!form) return false;
+    const editUrlTemplate = "{% url 'main:edit_product_entry_ajax' '00000000-0000-0000-0000-000000000000' %}";
+    const editUrl = editUrlTemplate.replace('00000000-0000-0000-0000-000000000000', productId);
 
+    try {
+      const resp = await fetch(editUrl, {
+        method: 'POST',
+        headers: { 'X-CSRFToken': csrftoken_local },
+        body: new FormData(form)
+      });
+      if (!resp.ok) {
+        console.error('edit failed', resp.status);
+        showToast('Failed to update product', '', 'error');
+        return false;
+      }
+      form.reset();
+      hideModal();
+      showToast('Product updated successfully!', '', 'success');
+      if (typeof window.fetchProductFromServer === 'function') window.fetchProductFromServer();
+      else document.dispatchEvent(new CustomEvent('productEdited', { detail: { id: productId } }));
+      return true;
+    } catch (err) {
+      console.error('editProductEntry error', err);
+      showToast('Error while updating product', '', 'error');
+      return false;
+    }
+  }
+
+  // ---------- form submit routing ----------
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('productForm');
+    if (!form) return;
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (isEditMode && currentEditProductId) editProductEntry(currentEditProductId);
+      else addProductEntry();
+    });
+  });
 </script>
