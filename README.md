@@ -136,3 +136,21 @@ IV. Jika belum ada product, siapkan gambar di folder static/image untuk ditampil
 V. Cek dulu apakah user yang sekarang login adalah pemilik produknya. Jika iya maka tampilkan button untuk mengedit dan menghapus. Tombol dibuat dengan menyisipkan link edit atau hapus.
 
 VI. Buat 2 navbar, untuk mobile dan desktop agar web menjadi responsive. Navbar berisi nama aplikasi, home, add product, informasi pengguna yg login, dan tombol logout. Untuk navbar versi desktop, fitur-fiturnya ada secara horizontal. Sedangkkan navbar mobile secara vertikal.
+
+## Pertanyaan Tugas 6
+### 1. Apa perbedaan antara synchronous request dan asynchronous request?
+Synchronus request dieksekusi secara berurutan, sehingga tugas sebelumnya harus sudah selesai sebelum tugas selanjutnya dieksekusi.
+Asynchronus request dieksekusi secara bersamaan, sehingga dapat lanjut ke tugas selanjutnya tanpa menunggu respons tugas sebelumnya.
+s
+
+### 2. Bagaimana AJAX bekerja di Django (alur request–response)?
+Pengguna melakukan aksi di web, JavaScript mengirim request AJAX ke server Django tanpa reload halaman, Django menerima request dan memproses di views.py, views mengirim respons ke JavaScript, terakhir JavaScript menerima dan menampilkan tampilan terbaru secara dinamis.
+
+### 3. Apa keuntungan menggunakan AJAX dibandingkan render biasa di Django?
+Halaman web bisa memperbarui data secara dinamis tanpa reload seluruh halaman, sehingga membuat aplikasi lebih cepat, interaktif, dan efisien dibandingkan render biasa di Django.
+
+### 4. Bagaimana cara memastikan keamanan saat menggunakan AJAX untuk fitur Login dan Register di Django?
+Menggunakan CSRF token untuk mencegah Cross-Site Request Forgery, validasi data di server agar input berbahaya tidak masuk, dan menggunakan sistem autentikasi Django.
+
+### 5. Bagaimana AJAX mempengaruhi pengalaman pengguna (User Experience) pada website?
+Dengan AJAX, pengguna tidak perlu reload page untuk mendapatkan data terbaru karena pembaruan dilakukan secara asynchronus. Hal ini membuat pengguna dapat menggunakan website dengan lebih cepat dan lancar.

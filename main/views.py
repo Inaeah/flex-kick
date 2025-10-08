@@ -14,6 +14,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404
+from django.utils.html import strip_tags
 
 
 # Create your views here.
@@ -162,10 +163,10 @@ def delete_product(request, id):
 @csrf_exempt
 @require_POST
 def add_product_entry_ajax(request):
-    name = request.POST.get("name")
-    brand = request.POST.get("brand")
+    name = strip_tags(request.POST.get("name"))
+    brand = strip_tags(request.POST.get("brand"))
     price = request.POST.get("price")
-    description = request.POST.get("description")
+    description = strip_tags(request.POST.get("description"))
     category = request.POST.get("category")
     thumbnail = request.POST.get("thumbnail")
     is_featured = request.POST.get("is_featured") == 'on'  # checkbox handling
@@ -193,10 +194,10 @@ def edit_product_entry_ajax(request, id):
     if request.user != p.user:
         return HttpResponse('Forbidden', status=403)
 
-    p.name = request.POST.get("name", p.name)
-    p.brand = request.POST.get("brand", p.brand)
+    p.name = strip_tags(request.POST.get("name", p.name))
+    p.brand = strip_tags(request.POST.get("brand", p.brand))
     p.price = request.POST.get("price", p.price)
-    p.description = request.POST.get("description", p.description)
+    p.description = strip_tags(request.POST.get("description", p.description))
     p.category = request.POST.get("category", p.category)
     p.thumbnail = request.POST.get("thumbnail", p.thumbnail)
     p.is_featured = request.POST.get("is_featured") == 'on'
