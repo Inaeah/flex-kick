@@ -182,7 +182,6 @@
     isEditMode = true;
     currentEditProductId = productId;
 
-    // first try client cache
     let product = null;
     try {
       if (window.allProductData && Array.isArray(window.allProductData)) {
@@ -192,7 +191,6 @@
       console.warn('openEditModal: error accessing client cache', err);
     }
 
-    // fallback fetch from server if not found
     if (!product) {
       try {
         const urlTemplate = "{% url 'main:show_json_by_id' '00000000-0000-0000-0000-000000000000' %}";
@@ -207,7 +205,6 @@
 
     if (product) populateFormWithProduct(product);
     else {
-      // leave form empty but set UI to edit mode
       const titleEl = document.querySelector('#crudModalContent h3');
       const submitBtn = document.getElementById('submitProduct');
       if (titleEl) titleEl.textContent = 'Edit Product';
